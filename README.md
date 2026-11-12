@@ -24,9 +24,17 @@ If you are using a private repo please allow access to the emails our recruiter 
 
 ## Running the App
 
-pull
-npm install
-npm run dev
+<!--
+fix: Removed incorrect shell command `pull npm install npm run dev`
+docs: Added instructions for running the app with pnpm.
+-->
+
+This project uses [pnpm](https://pnpm.io/) as its package manager. If you don't have it, install it globally first (`npm install -g pnpm`, or see the [installation docs](https://pnpm.io/installation)).
+
+```sh
+pnpm install
+pnpm dev
+```
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
