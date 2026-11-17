@@ -48,6 +48,32 @@ export const parseAvatarURL = (url: string, name: string): AvatarOptions => {
   }
 }
 
+// feat: share links carry the avatar config as UTF-8 safe base64 JSON in the ?avatar= query param
+export const encodeAvatarConfig = (options: AvatarOptions): string => {
+  const bytes = new TextEncoder().encode(JSON.stringify(options))
+  return btoa(String.fromCharCode(...bytes))
+}
+
+// returns undefined for anything that isn't a valid config, since share links are user supplied
+export const decodeAvatarConfig = (encoded: string): AvatarOptions => {
+  try {
+    // a raw "+" in a query string is read back as a space
+    const binary = atob(encoded.replace(/ /g, "+"))
+    const parsed = JSON.parse(new TextDecoder().decode(Uint8Array.from(binary, (c) => c.charCodeAt(0))))
+    if (!parsed || typeof parsed.name !== "string") return undefined
+    const options = { ...defaultRobot, name: parsed.name } as NonNullable<AvatarOptions>
+    for (const key of Object.keys(defaultRobot!) as (keyof typeof options)[]) {
+      if (key === "name" || !(key in parsed)) continue
+      // values are placed in the image URL, so only allow simple tokens
+      if (typeof parsed[key] !== "string" || !/^[\w-]+$/.test(parsed[key])) return undefined
+      options[key] = parsed[key]
+    }
+    return options
+  } catch {
+    return undefined
+  }
+}
+
 // options for customization: 
 export const customizationOptions: CustomizationOptions[] = [
   { label: "Eyes",
