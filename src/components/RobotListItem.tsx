@@ -1,5 +1,6 @@
 import { useContext } from 'react'
-import { AvatarListContext } from './../context'
+import { AvatarContext, AvatarListContext } from './../context'
+import { parseAvatarURL } from '../Services'
 import '../styles/robotListItem.css'
 
 interface Props {
@@ -11,6 +12,7 @@ interface Props {
 const RobotListItem = (props: Props) => {
   const {index, name, url} = props
   const {deleteAvatar} = useContext(AvatarListContext)
+  const {setAvatarOptions} = useContext(AvatarContext)
 
   return (
     <li className="avatar_item_container">
@@ -21,6 +23,12 @@ const RobotListItem = (props: Props) => {
         />
       </span>
       <span className="avatar_item_name">{name}</span>
+      {/* feat: load this saved avatar's options (preview, active options, colors) into the editor */}
+      <button
+        className="avatar_edit"
+        aria-label={`Edit ${name}`}
+        onClick={() => setAvatarOptions(parseAvatarURL(url, name))}
+        >✎</button>
       <button 
         className="avatar_delete"
         onClick={() => deleteAvatar(index)}

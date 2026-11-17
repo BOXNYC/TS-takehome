@@ -31,6 +31,23 @@ export const defaultRobot: AvatarOptions = {
   top: "lights"
 }
 
+// feat: rebuild avatar options from a saved avatar's URL (inverse of buildURL), so the saved avatar can be edited
+export const parseAvatarURL = (url: string, name: string): AvatarOptions => {
+  const params = new URL(url).searchParams
+  const get = (key: keyof NonNullable<AvatarOptions>) => params.get(key) ?? defaultRobot![key]
+  return {
+    name,
+    baseColor: get("baseColor"),
+    backgroundColor: get("backgroundColor"),
+    eyes: get("eyes"),
+    face: get("face"),
+    mouth: get("mouth"),
+    sides: get("sides"),
+    texture: get("texture"),
+    top: get("top"),
+  }
+}
+
 // options for customization: 
 export const customizationOptions: CustomizationOptions[] = [
   { label: "Eyes",
