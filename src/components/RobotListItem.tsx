@@ -7,10 +7,12 @@ interface Props {
   index: number
   name: string 
   url: string
+  // feat: lets the parent react to an edit, e.g. close the mobile offcanvas
+  onEdit?: () => void
 }
 
 const RobotListItem = (props: Props) => {
-  const {index, name, url} = props
+  const {index, name, url, onEdit} = props
   const {deleteAvatar} = useContext(AvatarListContext)
   const {setAvatarOptions} = useContext(AvatarContext)
 
@@ -51,7 +53,7 @@ const RobotListItem = (props: Props) => {
         className="avatar_edit"
         aria-label={`Edit ${name}`}
         title="Edit"
-        onClick={() => setAvatarOptions(parseAvatarURL(url, name))}
+        onClick={() => { setAvatarOptions(parseAvatarURL(url, name)); onEdit?.() }}
         ><span aria-hidden="true">✎</span></button>
       <button 
         type="button"

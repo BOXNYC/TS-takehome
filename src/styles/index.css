@@ -80,13 +80,15 @@ select {
 
 html{
   height: 100vh;
-  width: 100vw;
+  /* fix: 100vw includes the vertical scrollbar width, which caused a horizontal scrollbar on mobile */
+  width: 100%;
 }
 
 body{
   display: flex;
   height: 100vh;
-  width: 100vw; 
+  /* fix: 100% instead of 100vw, see html */
+  width: 100%;
   background-color: white;
 }
 

@@ -3,7 +3,7 @@ import AvatarPreview from './components/AvatarPreview'
 import OptionsPicker from './components/OptionsPicker'
 import ColorPicker from './components/UI/ColorPicker'
 import TextInput from './components/UI/TextInput'
-import { useCallback, useState, type ChangeEvent } from 'react'
+import { useCallback, useEffect, useState, type ChangeEvent } from 'react'
 import { useAvatarList } from './Hooks'
 import { AvatarContext, AvatarURLContext, AvatarListContext } from './context'
 import { buildURL, defaultRobot } from './Services'
@@ -15,6 +15,16 @@ function App() {
 
   const [avatarOptions, setAvatarOptions] = useState(defaultRobot)
   const { avatarList, saveAvatar, deleteAvatar } = useAvatarList()
+  // feat: mobile offcanvas state for the saved avatars column
+  const [listOpen, setListOpen] = useState(false)
+
+  // feat: Escape closes the offcanvas
+  useEffect(() => {
+    if (!listOpen) return
+    const onKeyDown = (e: KeyboardEvent) => { if (e.key === 'Escape') setListOpen(false) }
+    window.addEventListener('keydown', onKeyDown)
+    return () => window.removeEventListener('keydown', onKeyDown)
+  }, [listOpen])
   
   // feat: added memoization
   const updateName = useCallback((e: ChangeEvent<HTMLInputElement>) => {
@@ -27,6 +37,8 @@ function App() {
   const handleSave = useCallback((url:string, name: string) => {
     saveAvatar({URL: url, name: name})
     setAvatarOptions(defaultRobot)
+    // feat: on mobile, open the saved avatars drawer after saving so the new entry is visible
+    if (window.matchMedia('(max-width: 768px)').matches) setListOpen(true)
   }, [saveAvatar])
   
   // feat: check if avatar name is valid (non-empty after trimming)
@@ -41,6 +53,20 @@ function App() {
             {/* feat: a11y main landmark, hidden page heading and a polite live list for saves/deletes */}
             <main className="main">
               <h1 className="visually_hidden">Robot avatar creator</h1>
+              {/* feat: hamburger opens the saved avatars offcanvas (shown only at the mobile breakpoint) */}
+              <button
+                type="button"
+                className="list_toggle"
+                aria-label="Open saved avatars"
+                title="Saved avatars"
+                aria-expanded={listOpen}
+                aria-controls="avatar-list"
+                onClick={() => setListOpen(true)}
+              >
+                <span aria-hidden="true" className="hamburger" />
+              </button>
+              {/* feat: backdrop closes the offcanvas when tapped */}
+              {listOpen && <div className="list_backdrop" aria-hidden="true" onClick={() => setListOpen(false)} />}
               <div className="avatar_creator">
                 <SaveButton
                   disabled={!avatarNameOk} 
@@ -76,7 +102,18 @@ function App() {
                 </div>
                 <OptionsPicker/>
               </div>
-              <div className="avatar_list">
+              <div className={`avatar_list${listOpen ? " open" : ""}`} id="avatar-list">
+                {/* feat: offcanvas header with a close button (hidden on desktop) */}
+                <div className="avatar_list_header">
+                  <span>Saved avatars</span>
+                  <button
+                    type="button"
+                    className="list_close"
+                    aria-label="Close saved avatars"
+                    title="Close"
+                    onClick={() => setListOpen(false)}
+                  ><span aria-hidden="true">✕</span></button>
+                </div>
                 <ul aria-label="Saved avatars" aria-live="polite" aria-relevant="additions removals">
                   {/* feat: show message if no avatars are saved */}
                   { (!avatarList || avatarList.length === 0) && (
@@ -89,6 +126,7 @@ function App() {
                           index={index}
                           name={avatar.name}
                           url={avatar.URL}
+                          onEdit={() => setListOpen(false)}
                         />
                       )
                     })
