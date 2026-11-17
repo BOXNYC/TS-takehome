@@ -1,0 +1,64 @@
+.option_selection {
+  position: relative;
+  cursor: pointer;
+  /* feat: a11y reset native button styles now that the tile is a button */
+  display: block;
+  padding: 0;
+  border: 0;
+  background: none;
+}
+
+/* feat: highlight the option currently set in the preview: dark ring with a white gap, plus a check badge */
+/* fix: higher specificity so the ring survives the hover/active shadows in optionsPicker.css */
+.option_selection.option_active,
+.option_selection.option_active:hover,
+.option_selection.option_active:active {
+  box-shadow: 0 0 0 2px #fff, 0 0 0 5px #222;
+}
+
+/* feat: check badge in the top-right corner of the active option */
+.option_active::after {
+  content: "✓";
+  /* feat: a11y empty alt text so screen readers skip the decorative check */
+  content: "✓" / "";
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background-color: #222;
+  color: #fff;
+  font-size: 14px;
+  font-weight: bold;
+  line-height: 22px;
+  text-align: center;
+}
+
+/* background shown while the image loads */
+.option_loading {
+  background-color: #00d3dd;
+}
+
+/* keep the image in the DOM so it keeps loading, but hide it until ready */
+.option_img_loading {
+  visibility: hidden;
+}
+
+/* feat: spinner overlay, centered in the tile */
+.option_spinner {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 24px;
+  height: 24px;
+  margin: -12px 0 0 -12px;
+  border: 3px solid #eee;
+  border-top-color: #888;
+  border-radius: 50%;
+  animation: option_spin 0.8s linear infinite;
+}
+
+@keyframes option_spin {
+  to { transform: rotate(360deg); }
+}

@@ -27,6 +27,9 @@
   color: #666;
 }
 
+/* feat: share and edit buttons share the delete button's round style */
+button.avatar_share,
+button.avatar_edit,
 button.avatar_delete {
   font-size: .9rem;
   line-height: 1.5rem;
@@ -34,13 +37,29 @@ button.avatar_delete {
   width:24px;
   border-radius: 14px;
   border: 0px solid transparent;
-  background-color: #ddd
+  background-color: #ddd;
+  cursor: pointer;
+  /* feat: center the svg share icon inside the round button */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  color: #555;
 }
 
+button.avatar_share,
+button.avatar_edit {
+  margin-right: 8px;
+}
+
+.avatar_share:hover,
+.avatar_edit:hover,
 .avatar_delete:hover {
   background-color: #ccc;
 }
 
+.avatar_share:active,
+.avatar_edit:active,
 .avatar_delete:active {
   background-color: #aaa;
 }

@@ -1,6 +1,9 @@
 import '../styles/optionsPicker.css'
-import TabBar from './UI/tabBar'
-import { CustomizationOptions, TabData } from '../Types'
+// fix: import casing matches TabBar.tsx
+import TabBar from './UI/TabBar'
+// feat: AvatarOption tile shows a loading spinner until its image loads
+import AvatarOption from './AvatarOption'
+import { CustomizationOptions, OptionKey, TabData } from '../Types'
 import { customizationOptions } from '../Services'
 import { useState } from 'react'
 import { buildURL } from '../Services'
@@ -14,12 +17,12 @@ const OptionsPicker = () => {
   const {avatarOptions, setAvatarOptions} = useContext(AvatarContext)
   const [activeTab, setActiveTab] = useState(customizationOptions[0].option)
   const [displayOptions, setDisplayOptions] = useState(customizationOptions[0].values)
-  const tabData:TabData[] = customizationOptions.map( (tab:TabData) => 
+  const tabData:TabData[] = customizationOptions.map( (tab) => 
     ({label: tab.label, option: tab.option })
   )
 
-  const handleOnClick = (option?: string) => {
-    if (option) setActiveTab(option)
+  const handleOnClick = (option: OptionKey) => {
+    setActiveTab(option)
     const optionValues = getDisplayOptions(customizationOptions, option)
     setDisplayOptions(optionValues)
   }
@@ -35,10 +38,9 @@ const OptionsPicker = () => {
     return customizationOptions[0].values
   }
 
-  const updateAvatar = (optKey:string, value:string) => {
-    const _O = {...avatarOptions}
-    _O[optKey]=value
-    setAvatarOptions(_O)
+  // fix: typed option key and functional state update
+  const updateAvatar = (optKey: OptionKey, value: string) => {
+    setAvatarOptions((prev) => prev && {...prev, [optKey]: value})
   }
 
   return (
@@ -47,19 +49,17 @@ const OptionsPicker = () => {
         tabData = {tabData}
         handleOnClick = {handleOnClick}
       />
-      <div className="options_examples">
+      {/* feat: a11y tabpanel controlled by the tab bar */}
+      <div className="options_examples" id="options-panel" role="tabpanel" aria-label="Options">
           {displayOptions.map((opt, i) => {
             return (
-              <div
-                key={ `{opt_${i}}`} 
-                className="option_selection"
-                onClick = {() => {updateAvatar(activeTab, opt)}}
-                >
-                <img
-                  src={buildURL(avatarOptions, {name: activeTab, value: opt})}
-                  alt="avatar"
-                />
-              </div>
+              <AvatarOption
+                key={ `{opt_${i}}`}
+                src={buildURL(avatarOptions, {name: activeTab, value: opt})}
+                onClick={() => {updateAvatar(activeTab, opt)}}
+                isActive={avatarOptions?.[activeTab] === opt}
+                label={`${activeTab}: ${opt}`}
+              />
             )
           })
           }

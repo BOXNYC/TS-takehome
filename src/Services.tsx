@@ -19,11 +19,6 @@ export const buildURL = (avatarOptions: AvatarOptions | undefined, overrideOptio
   return baseURL + queryString 
 }
 
-// generate unique-ish ID
-export const generateKey = (name: string) => {
-  return `${name}${Math.floor(Math.random()*1000000)}`
-}
-
 export const defaultRobot: AvatarOptions = {
   name: "",
   baseColor: "94E044",
@@ -34,6 +29,49 @@ export const defaultRobot: AvatarOptions = {
   sides: "square",
   texture: "dots",
   top: "lights"
+}
+
+// feat: rebuild avatar options from a saved avatar's URL (inverse of buildURL), so the saved avatar can be edited
+export const parseAvatarURL = (url: string, name: string): AvatarOptions => {
+  const params = new URL(url).searchParams
+  const get = (key: keyof NonNullable<AvatarOptions>) => params.get(key) ?? defaultRobot![key]
+  return {
+    name,
+    baseColor: get("baseColor"),
+    backgroundColor: get("backgroundColor"),
+    eyes: get("eyes"),
+    face: get("face"),
+    mouth: get("mouth"),
+    sides: get("sides"),
+    texture: get("texture"),
+    top: get("top"),
+  }
+}
+
+// feat: share links carry the avatar config as UTF-8 safe base64 JSON in the ?avatar= query param
+export const encodeAvatarConfig = (options: AvatarOptions): string => {
+  const bytes = new TextEncoder().encode(JSON.stringify(options))
+  return btoa(String.fromCharCode(...bytes))
+}
+
+// returns undefined for anything that isn't a valid config, since share links are user supplied
+export const decodeAvatarConfig = (encoded: string): AvatarOptions => {
+  try {
+    // a raw "+" in a query string is read back as a space
+    const binary = atob(encoded.replace(/ /g, "+"))
+    const parsed = JSON.parse(new TextDecoder().decode(Uint8Array.from(binary, (c) => c.charCodeAt(0))))
+    if (!parsed || typeof parsed.name !== "string") return undefined
+    const options = { ...defaultRobot, name: parsed.name } as NonNullable<AvatarOptions>
+    for (const key of Object.keys(defaultRobot!) as (keyof typeof options)[]) {
+      if (key === "name" || !(key in parsed)) continue
+      // values are placed in the image URL, so only allow simple tokens
+      if (typeof parsed[key] !== "string" || !/^[\w-]+$/.test(parsed[key])) return undefined
+      options[key] = parsed[key]
+    }
+    return options
+  } catch {
+    return undefined
+  }
 }
 
 // options for customization: 

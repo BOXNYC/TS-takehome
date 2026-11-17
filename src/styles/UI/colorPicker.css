@@ -5,6 +5,10 @@
 }
 
 .current_selection {
+  /* feat: a11y reset native button styles now that the swatch is a button */
+  padding: 0;
+  border: 0;
+  cursor: pointer;
   border-radius: 15px;
   height: 22px;
   width: 22px;
@@ -35,12 +39,15 @@
   border: 1px solid #888;
 }
 
-.color_palette div {
+.color_palette button {
   display: block;
+  padding: 0;
+  border: 0;
+  cursor: pointer;
   height: 20px;
   width: 20px;
 }
 
-.color_palette div:hover {
+.color_palette button:hover {
   box-shadow: inset 0 0 4px rgba(0,0,0,0.8);
 }

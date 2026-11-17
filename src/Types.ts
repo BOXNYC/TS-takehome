@@ -17,24 +17,26 @@ export interface Avatar {
   options: AvatarOptions  
 }
 
+// fix: named union so option keys are typed instead of string
+export type OptionKey = "name" | "backgroundColor" | "baseColor" | "eyes" | "face" | "mouth" | "sides" | "texture" | "top"
+
 export interface OverrideOption {
-  name: "name" | "backgroundColor" | "baseColor" | "eyes" | "face" | "mouth" | "sides" | "texture" | "top"
+  name: OptionKey
   value: string
 }
 
 export type TabData = {
   label:string,
-  option:string
+  option:OptionKey
 }
 
 export interface CustomizationOptions {
   label:string,
-  option:string 
+  option:OptionKey
   values:string[]
 }
 
 export interface AvatarListItem {
-  key: string;
   URL: string;
   name: string;
 }

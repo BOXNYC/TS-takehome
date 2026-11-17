@@ -24,9 +24,17 @@ If you are using a private repo please allow access to the emails our recruiter 
 
 ## Running the App
 
-pull
-npm install
-npm run dev
+<!--
+fix: Removed incorrect shell command `pull npm install npm run dev`
+docs: Added instructions for running the app with pnpm.
+-->
+
+This project uses [pnpm](https://pnpm.io/) as its package manager. If you don't have it, install it globally first (`npm install -g pnpm`, or see the [installation docs](https://pnpm.io/installation)).
+
+```sh
+pnpm install
+pnpm dev
+```
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
@@ -34,3 +42,11 @@ Currently, two official plugins are available:
 
 - [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
 - [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+
+## Further Work
+
+- Improve the styling and layout of the avatar creator and list
+- Add more configuration options for the avatars
+- Implement better state management for the app
+- Add unit and integration tests
+- Optimize performance for large numbers of avatars

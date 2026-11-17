@@ -11,12 +11,16 @@ const SaveButton = (props:PropsWithChildren<Props>) => {
   
   return (
     <>
+      {/* feat: a11y accessible name for the icon-only "+" button */}
       <button
+        type="button"
         className="save_button"
         disabled={disabled}
+        aria-label="Save avatar"
+        title="Save avatar"
         onClick = {handleOnClick}
       >
-        <span>
+        <span aria-hidden="true">
           {children}
         </span>
       </button>
