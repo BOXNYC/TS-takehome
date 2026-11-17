@@ -1,20 +1,20 @@
-import { TabData } from '../../Types'
+import { OptionKey, TabData } from '../../Types'
 import '../../styles/UI/tabBar.css'
 import { useState } from 'react'
 
 interface Props {
   tabData: TabData[]
-  handleOnClick: (e?:string) => void 
+  handleOnClick: (option: OptionKey) => void 
 }
 
 const TabBar = (props: Props) => {
   const {tabData, handleOnClick} = props
   const [activeTab, setActiveTab] = useState(tabData[0].option)
   
-  const onClick = () => {
-    const et:any = event?.target;
-    setActiveTab(et.value)
-    handleOnClick(et.value)
+  // fix: removed any type and global event usage, pass option directly
+  const onClick = (option: OptionKey) => {
+    setActiveTab(option)
+    handleOnClick(option)
   }
 
   return (
@@ -26,7 +26,7 @@ const TabBar = (props: Props) => {
                       key= {`tab_${i}`}
                       value = {tab.option} 
                       className = {isActive ? "active" : "" }
-                      onClick={() => onClick()}>
+                      onClick={() => onClick(tab.option)}>
                         {tab.label}
                       </button>
           }

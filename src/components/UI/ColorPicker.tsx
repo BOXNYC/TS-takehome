@@ -1,25 +1,25 @@
 import { useState } from 'react'
 import { useContext } from 'react'
 import { AvatarContext } from '../../context'
+import type { OptionKey } from '../../Types'
 import { COLOR_PALETTE } from '../../Services'
 import '../../styles/UI/colorPicker.css'
 
 interface Props {
   label: string;
   defaultColor: string; 
-  optionKey: string;
+  optionKey: OptionKey;
 }
 
 const ColorPicker = (props: Props) => {
   const {label, defaultColor, optionKey} = props; 
-  const {avatarOptions, setAvatarOptions} = useContext(AvatarContext)
+  const {setAvatarOptions} = useContext(AvatarContext)
   const [showPicker, setShowPicker] = useState(false)
   const palette = COLOR_PALETTE
   
-  const handleOnClick = (optionKey:string, color: string) => {
-    const _O = {...avatarOptions}
-    _O[optionKey] = color
-    setAvatarOptions(_O)
+  // fix: typed option key and functional state update
+  const handleOnClick = (optionKey: OptionKey, color: string) => {
+    setAvatarOptions((prev) => prev && {...prev, [optionKey]: color})
   }
   
   return (

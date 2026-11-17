@@ -1,6 +1,7 @@
 import '../styles/optionsPicker.css'
-import TabBar from './UI/tabBar'
-import { CustomizationOptions, TabData } from '../Types'
+// fix: import casing matches TabBar.tsx
+import TabBar from './UI/TabBar'
+import { CustomizationOptions, OptionKey, TabData } from '../Types'
 import { customizationOptions } from '../Services'
 import { useState } from 'react'
 import { buildURL } from '../Services'
@@ -14,12 +15,12 @@ const OptionsPicker = () => {
   const {avatarOptions, setAvatarOptions} = useContext(AvatarContext)
   const [activeTab, setActiveTab] = useState(customizationOptions[0].option)
   const [displayOptions, setDisplayOptions] = useState(customizationOptions[0].values)
-  const tabData:TabData[] = customizationOptions.map( (tab:TabData) => 
+  const tabData:TabData[] = customizationOptions.map( (tab) => 
     ({label: tab.label, option: tab.option })
   )
 
-  const handleOnClick = (option?: string) => {
-    if (option) setActiveTab(option)
+  const handleOnClick = (option: OptionKey) => {
+    setActiveTab(option)
     const optionValues = getDisplayOptions(customizationOptions, option)
     setDisplayOptions(optionValues)
   }
@@ -35,10 +36,9 @@ const OptionsPicker = () => {
     return customizationOptions[0].values
   }
 
-  const updateAvatar = (optKey:string, value:string) => {
-    const _O = {...avatarOptions}
-    _O[optKey]=value
-    setAvatarOptions(_O)
+  // fix: typed option key and functional state update
+  const updateAvatar = (optKey: OptionKey, value: string) => {
+    setAvatarOptions((prev) => prev && {...prev, [optKey]: value})
   }
 
   return (
