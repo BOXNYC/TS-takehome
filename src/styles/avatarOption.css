@@ -1,0 +1,32 @@
+.option_selection {
+  position: relative;
+  cursor: pointer;
+}
+
+/* background shown while the image loads */
+.option_loading {
+  background-color: #00d3dd;
+}
+
+/* keep the image in the DOM so it keeps loading, but hide it until ready */
+.option_img_loading {
+  visibility: hidden;
+}
+
+/* feat: spinner overlay, centered in the tile */
+.option_spinner {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 24px;
+  height: 24px;
+  margin: -12px 0 0 -12px;
+  border: 3px solid #eee;
+  border-top-color: #888;
+  border-radius: 50%;
+  animation: option_spin 0.8s linear infinite;
+}
+
+@keyframes option_spin {
+  to { transform: rotate(360deg); }
+}

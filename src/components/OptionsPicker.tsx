@@ -1,6 +1,8 @@
 import '../styles/optionsPicker.css'
 // fix: import casing matches TabBar.tsx
 import TabBar from './UI/TabBar'
+// feat: AvatarOption tile shows a loading spinner until its image loads
+import AvatarOption from './AvatarOption'
 import { CustomizationOptions, OptionKey, TabData } from '../Types'
 import { customizationOptions } from '../Services'
 import { useState } from 'react'
@@ -50,16 +52,11 @@ const OptionsPicker = () => {
       <div className="options_examples">
           {displayOptions.map((opt, i) => {
             return (
-              <div
-                key={ `{opt_${i}}`} 
-                className="option_selection"
-                onClick = {() => {updateAvatar(activeTab, opt)}}
-                >
-                <img
-                  src={buildURL(avatarOptions, {name: activeTab, value: opt})}
-                  alt="avatar"
-                />
-              </div>
+              <AvatarOption
+                key={ `{opt_${i}}`}
+                src={buildURL(avatarOptions, {name: activeTab, value: opt})}
+                onClick={() => {updateAvatar(activeTab, opt)}}
+              />
             )
           })
           }
