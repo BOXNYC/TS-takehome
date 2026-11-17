@@ -28,6 +28,9 @@ function App() {
     saveAvatar({URL: url, name: name})
     setAvatarOptions(defaultRobot)
   }, [saveAvatar])
+  
+  // feat: check if avatar name is valid (non-empty after trimming)
+  const avatarNameOk = avatarOptions?.name && avatarOptions.name.trim() !== "";
 
   return (
     <div className="app_container">
@@ -38,11 +41,11 @@ function App() {
             <div className="main">
               <div className="avatar_creator">
                 <SaveButton
-                  disabled={avatarOptions?.name==="" ? true : false} 
+                  disabled={!avatarNameOk} 
                   handleOnClick={() => {
                     // fix: prevent saving if name is empty
-                    if (!avatarOptions?.name) return;
-                    handleSave(buildURL(avatarOptions), avatarOptions.name)
+                    if (!avatarNameOk) return;
+                    handleSave(buildURL(avatarOptions), avatarOptions.name.trim())
                   }}
                 >+</SaveButton>
 
