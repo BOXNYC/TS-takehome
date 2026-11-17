@@ -32,6 +32,10 @@ div.avatar_creator{
   height: 100vh;
   box-shadow: inset 1px -3px 5px rgba(0,0,0, 0.2);
   overflow: scroll;
+  
+  /* feat: make avatar list sticky */
+  position: sticky;
+  top: 0;
 }
 
 .avatar_list ul {
@@ -42,4 +46,11 @@ div.avatar_creator{
   margin: 0;
   flex-flow: column nowrap;
   align-items: flex-start;
+}
+
+/* feat: style for no avatars message */
+.no_avatars {
+  font-style: italic;
+  color: #888;
+  padding: 16px;
 }

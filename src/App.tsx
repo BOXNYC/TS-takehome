@@ -3,10 +3,10 @@ import AvatarPreview from './components/AvatarPreview'
 import OptionsPicker from './components/OptionsPicker'
 import ColorPicker from './components/UI/ColorPicker'
 import TextInput from './components/UI/TextInput'
-import { useState } from 'react'
-import { useOnUpdateAvatarList } from './Hooks'
+import { useCallback, useState, type ChangeEvent } from 'react'
+import { useAvatarList } from './Hooks'
 import { AvatarContext, AvatarURLContext, AvatarListContext } from './context'
-import { generateKey,buildURL, defaultRobot } from './Services'
+import { buildURL, defaultRobot } from './Services'
 import RobotListItem from './components/RobotListItem'
 import SaveButton from './components/UI/SaveButton'
 
@@ -14,37 +14,36 @@ import SaveButton from './components/UI/SaveButton'
 function App() {
 
   const [avatarOptions, setAvatarOptions] = useState(defaultRobot)
-  const [avatarList, setAvatarList] = useState(useOnUpdateAvatarList)
-
-  const updateName = () => {
-    const _O = {...avatarOptions}
-    _O.name = event?.target.value
-    setAvatarOptions(_O)    
-  }
-
-  const saveAvatar = (url:string, name: string) => {
-    console.log(event?.target)
-    try{
-      console.log("fire!!!")
-      window.localStorage.setItem(generateKey(name), JSON.stringify({URL:url, name:name}))
-      setAvatarList(useOnUpdateAvatarList())
-      setAvatarOptions(defaultRobot)
-    } catch(error) {
-      console.log(error)
-    }
-  }
+  const { avatarList, saveAvatar, deleteAvatar } = useAvatarList()
+  
+  // feat: added memoization
+  const updateName = useCallback((e: ChangeEvent<HTMLInputElement>) => {
+    // fix: ensure avatarOptions is not null before updating name
+    const name = e.target.value
+    setAvatarOptions((prev) => prev && {...prev, name})
+  }, [])
+  
+  // feat: added memoization
+  const handleSave = useCallback((url:string, name: string) => {
+    saveAvatar({URL: url, name: name})
+    setAvatarOptions(defaultRobot)
+  }, [saveAvatar])
 
   return (
     <div className="app_container">
       <AvatarContext.Provider value = {{avatarOptions, setAvatarOptions}}>
         <AvatarURLContext.Provider value = {buildURL(avatarOptions)}>
-          <AvatarListContext.Provider value = {{avatarList, setAvatarList}}>
+          <AvatarListContext.Provider value = {{avatarList, saveAvatar, deleteAvatar}}>
 
             <div className="main">
               <div className="avatar_creator">
                 <SaveButton
                   disabled={avatarOptions?.name==="" ? true : false} 
-                  handleOnClick={() => {saveAvatar(buildURL(avatarOptions), avatarOptions?.name)}}
+                  handleOnClick={() => {
+                    // fix: prevent saving if name is empty
+                    if (!avatarOptions?.name) return;
+                    handleSave(buildURL(avatarOptions), avatarOptions.name)
+                  }}
                 >+</SaveButton>
 
                 <AvatarPreview
@@ -74,10 +73,15 @@ function App() {
               </div>
               <div className="avatar_list">
                 <ul>
-                  { avatarList && avatarList.map((avatar) => {
+                  {/* feat: show message if no avatars are saved */}
+                  { (!avatarList || avatarList.length === 0) && (
+                    <li className="no_avatars">No avatars saved</li>
+                  )}
+                  { avatarList && avatarList.length > 0 && avatarList.map((avatar, index) => {
                       return (
                         <RobotListItem
-                          keyName={avatar.key}
+                          key={index}
+                          index={index}
                           name={avatar.name}
                           url={avatar.URL}
                         />

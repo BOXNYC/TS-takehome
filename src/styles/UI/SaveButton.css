@@ -18,6 +18,13 @@ button.save_button {
   border: none;
   align-self: flex-end;
   box-shadow: 0 0 5px rgb(0, 51, 38, 0.5);
+
+  /* feat: ensure save button is above other elements, and sticky */
+  z-index: 1;
+  position: sticky;
+  top: 16px;
+  /* pointer cursor for save button */
+  cursor: pointer;
 }
 
 .save_button:hover {
@@ -26,8 +33,11 @@ button.save_button {
 
 }
 .save_button:disabled {
-  box-shadow: 0 0 8px #aaa;
-  background-color: #eee;
+  /* feat: hide save button when disabled */
+  /* box-shadow: 0 0 8px #aaa;
+  background-color: #eee; */
+  visibility: hidden;
+  pointer-events: none;
 }
 
 .save_button:active {

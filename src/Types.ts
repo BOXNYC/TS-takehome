@@ -34,7 +34,6 @@ export interface CustomizationOptions {
 }
 
 export interface AvatarListItem {
-  key: string;
   URL: string;
   name: string;
 }

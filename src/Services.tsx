@@ -19,11 +19,6 @@ export const buildURL = (avatarOptions: AvatarOptions | undefined, overrideOptio
   return baseURL + queryString 
 }
 
-// generate unique-ish ID
-export const generateKey = (name: string) => {
-  return `${name}${Math.floor(Math.random()*1000000)}`
-}
-
 export const defaultRobot: AvatarOptions = {
   name: "",
   baseColor: "94E044",
