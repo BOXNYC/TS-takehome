@@ -56,6 +56,7 @@ const OptionsPicker = () => {
                 key={ `{opt_${i}}`}
                 src={buildURL(avatarOptions, {name: activeTab, value: opt})}
                 onClick={() => {updateAvatar(activeTab, opt)}}
+                isActive={avatarOptions?.[activeTab] === opt}
               />
             )
           })

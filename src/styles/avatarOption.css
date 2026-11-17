@@ -3,6 +3,31 @@
   cursor: pointer;
 }
 
+/* feat: highlight the option currently set in the preview: dark ring with a white gap, plus a check badge */
+/* fix: higher specificity so the ring survives the hover/active shadows in optionsPicker.css */
+.option_selection.option_active,
+.option_selection.option_active:hover,
+.option_selection.option_active:active {
+  box-shadow: 0 0 0 2px #fff, 0 0 0 5px #222;
+}
+
+/* feat: check badge in the top-right corner of the active option */
+.option_active::after {
+  content: "✓";
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background-color: #222;
+  color: #fff;
+  font-size: 14px;
+  font-weight: bold;
+  line-height: 22px;
+  text-align: center;
+}
+
 /* background shown while the image loads */
 .option_loading {
   background-color: #00d3dd;
