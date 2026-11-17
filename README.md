@@ -42,3 +42,11 @@ Currently, two official plugins are available:
 
 - [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
 - [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+
+## Further Work
+
+- Improve the styling and layout of the avatar creator and list
+- Add more configuration options for the avatars
+- Implement better state management for the app
+- Add unit and integration tests
+- Optimize performance for large numbers of avatars
