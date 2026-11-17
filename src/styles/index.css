@@ -96,3 +96,24 @@ html, body, p, a, div, ul, li {
   font-weight: 400;
   font-style: normal;
 }
+
+
+/* feat: a11y visible keyboard focus for all buttons and links */
+button:focus-visible,
+a:focus-visible {
+  outline: 3px solid #222;
+  outline-offset: 2px;
+}
+
+/* feat: a11y text available to screen readers only */
+.visually_hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}

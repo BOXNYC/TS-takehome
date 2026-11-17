@@ -55,6 +55,7 @@ div.avatar_creator{
 /* feat: style for no avatars message */
 .no_avatars {
   font-style: italic;
-  color: #888;
+  /* feat: a11y darker text for AA contrast on white */
+  color: #666;
   padding: 16px;
 }

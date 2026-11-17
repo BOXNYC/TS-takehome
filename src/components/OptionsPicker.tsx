@@ -49,7 +49,8 @@ const OptionsPicker = () => {
         tabData = {tabData}
         handleOnClick = {handleOnClick}
       />
-      <div className="options_examples">
+      {/* feat: a11y tabpanel controlled by the tab bar */}
+      <div className="options_examples" id="options-panel" role="tabpanel" aria-label="Options">
           {displayOptions.map((opt, i) => {
             return (
               <AvatarOption
@@ -57,6 +58,7 @@ const OptionsPicker = () => {
                 src={buildURL(avatarOptions, {name: activeTab, value: opt})}
                 onClick={() => {updateAvatar(activeTab, opt)}}
                 isActive={avatarOptions?.[activeTab] === opt}
+                label={`${activeTab}: ${opt}`}
               />
             )
           })

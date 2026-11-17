@@ -17,17 +17,21 @@ const RobotListItem = (props: Props) => {
   return (
     <li className="avatar_item_container">
       <span className="item_avatar">
+        {/* feat: a11y alt text includes the avatar name */}
         <img
           src={url}
-          alt={`robot avatar`}
+          alt={`${name} robot avatar`}
         />
       </span>
       <span className="avatar_item_name">{name}</span>
       {/* feat: load this saved avatar's options (preview, active options, colors) into the editor */}
       {/* feat: open the share page for this avatar in a new window */}
+      {/* feat: a11y icon buttons get aria-labels/titles naming the avatar, glyph text is aria-hidden */}
       <button
+        type="button"
         className="avatar_share"
-        aria-label={`Share ${name}`}
+        aria-label={`Share ${name} (opens in a new window)`}
+        title="Share (opens in a new window)"
         onClick={() => window.open(
           `/share?avatar=${encodeURIComponent(encodeAvatarConfig(parseAvatarURL(url, name)))}`,
           '_blank',
@@ -43,14 +47,19 @@ const RobotListItem = (props: Props) => {
         </svg>
       </button>
       <button
+        type="button"
         className="avatar_edit"
         aria-label={`Edit ${name}`}
+        title="Edit"
         onClick={() => setAvatarOptions(parseAvatarURL(url, name))}
-        >✎</button>
+        ><span aria-hidden="true">✎</span></button>
       <button 
+        type="button"
         className="avatar_delete"
+        aria-label={`Delete ${name}`}
+        title="Delete"
         onClick={() => deleteAvatar(index)}
-        >X</button>
+        ><span aria-hidden="true">X</span></button>
     </li>
   )
 }

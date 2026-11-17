@@ -25,24 +25,39 @@ const ColorPicker = (props: Props) => {
   return (
     <>
       <div className="color_picker_container">
-        <div 
+        {/* feat: a11y swatch is a button that exposes the popup state; Escape closes the palette */}
+        <button
+          type="button"
           className="current_selection" 
           style={{ backgroundColor: defaultColor }}
-          onClick={() => setShowPicker(true)}
-          ></div>
+          aria-label={`${label} color, currently ${defaultColor}`}
+          title={`${label} color`}
+          aria-haspopup="true"
+          aria-expanded={showPicker}
+          onClick={() => setShowPicker((open) => !open)}
+          onKeyDown={(e) => { if (e.key === 'Escape') setShowPicker(false) }}
+          ></button>
         { showPicker &&
           <div 
             className="color_palette"
+            role="group"
+            aria-label={`${label} color palette`}
             onMouseLeave={() => setShowPicker(false)}
+            onKeyDown={(e) => { if (e.key === 'Escape') setShowPicker(false) }}
           >
             { 
               palette.map((color:string, i: number) => {
                 return (
-                  <div 
+                  // feat: a11y each swatch is a labeled button, aria-pressed marks the current color
+                  <button
+                    type="button"
                     key={`color_${i}`} style={{backgroundColor: `#${color}`}}
+                    aria-label={`#${color}`}
+                    title={`#${color}`}
+                    aria-pressed={defaultColor.toLowerCase() === `#${color}`.toLowerCase()}
                     onClick = {() => {handleOnClick(optionKey, color)}}
                     >
-                  </div>
+                  </button>
                 )
               })
             }

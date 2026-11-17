@@ -25,6 +25,9 @@ const TextInput = (props: Props) => {
         {label}
         <input 
           name={name}
+          // feat: a11y the visible label can be empty, so fall back to the placeholder or name
+          aria-label={label || placeholder || name}
+          autoComplete="off"
           value={value}
           className={className ? className: ""}
           type="Text"

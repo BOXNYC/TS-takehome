@@ -1,6 +1,11 @@
 .option_selection {
   position: relative;
   cursor: pointer;
+  /* feat: a11y reset native button styles now that the tile is a button */
+  display: block;
+  padding: 0;
+  border: 0;
+  background: none;
 }
 
 /* feat: highlight the option currently set in the preview: dark ring with a white gap, plus a check badge */
@@ -14,6 +19,8 @@
 /* feat: check badge in the top-right corner of the active option */
 .option_active::after {
   content: "✓";
+  /* feat: a11y empty alt text so screen readers skip the decorative check */
+  content: "✓" / "";
   position: absolute;
   top: 6px;
   right: 6px;

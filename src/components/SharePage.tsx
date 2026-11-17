@@ -7,7 +7,8 @@ const SharePage = () => {
   const options = encoded ? decodeAvatarConfig(encoded) : undefined
 
   return (
-    <div className="share_page">
+    // feat: a11y main landmark; invalid link message is announced as an alert
+    <main className="share_page">
       {options ? (
         <>
           <div className="share_avatar">
@@ -17,11 +18,11 @@ const SharePage = () => {
         </>
       ) : (
         // fix: show a message instead of crashing on a missing or malformed link
-        <p className="share_error">This share link is invalid.</p>
+        <p className="share_error" role="alert">This share link is invalid.</p>
       )}
       {/* feat: link styled as a button via share_button */}
       <a className="share_button" href="/">Create your own</a>
-    </div>
+    </main>
   )
 }
 

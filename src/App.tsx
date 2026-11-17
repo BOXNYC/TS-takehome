@@ -38,7 +38,9 @@ function App() {
         <AvatarURLContext.Provider value = {buildURL(avatarOptions)}>
           <AvatarListContext.Provider value = {{avatarList, saveAvatar, deleteAvatar}}>
 
-            <div className="main">
+            {/* feat: a11y main landmark, hidden page heading and a polite live list for saves/deletes */}
+            <main className="main">
+              <h1 className="visually_hidden">Robot avatar creator</h1>
               <div className="avatar_creator">
                 <SaveButton
                   disabled={!avatarNameOk} 
@@ -75,7 +77,7 @@ function App() {
                 <OptionsPicker/>
               </div>
               <div className="avatar_list">
-                <ul>
+                <ul aria-label="Saved avatars" aria-live="polite" aria-relevant="additions removals">
                   {/* feat: show message if no avatars are saved */}
                   { (!avatarList || avatarList.length === 0) && (
                     <li className="no_avatars">No avatars saved</li>
@@ -93,7 +95,7 @@ function App() {
                   }
                 </ul>
               </div>
-            </div>
+            </main>
           </AvatarListContext.Provider>  
         </AvatarURLContext.Provider>
       </AvatarContext.Provider>
